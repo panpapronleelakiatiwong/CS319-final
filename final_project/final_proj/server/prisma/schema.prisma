@@ -1,0 +1,113 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum Role {
+  DONOR
+  VOLUNTEER
+  ADMIN
+}
+
+enum ItemStatus {
+  AVAILABLE
+  RESERVED
+  USED
+}
+
+enum CaseStatus {
+  OPEN
+  IN_PROGRESS
+  DONE
+}
+
+enum ReservationStatus {
+  RESERVED
+  PICKED_UP
+  CANCELLED
+}
+
+model User {
+  id          Int          @id @default(autoincrement())
+  name        String
+  email       String?      @unique // ผู้บริจาคที่เพิ่มจากฟอร์มลงประกาศอาจไม่มีอีเมล
+  phone       String?
+  role        Role         @default(DONOR)
+  items       Item[]
+  repairCases RepairCase[]
+  createdAt   DateTime     @default(now())
+}
+
+model Category {
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+  items Item[]
+}
+
+model Item {
+  id            Int           @id @default(autoincrement())
+  title         String
+  description   String        @default("")
+  spec          String        @default("")
+  quantity      Int
+  unit          String
+  condition     String        @default("ดี")
+  imageUrl      String        @default("")
+  province      String        @default("") // จังหวัด
+  district      String        @default("") // เขต/อำเภอ
+  subdistrict   String        @default("") // แขวง/ตำบล
+  postalCode    String        @default("") // รหัสไปรษณีย์ 5 หลัก
+  addressDetail String        @default("") // บ้านเลขที่ ซอย ถนน หมู่บ้าน
+  pickupAddress String        @default("") // จุดรับของ เช่น หน้าบ้าน/โกดัง เวลานัดรับ
+  contactPhone  String        @default("") // เบอร์โทรติดต่อรับของ
+  status        ItemStatus    @default(AVAILABLE)
+  categoryId    Int
+  donorId       Int
+  category      Category      @relation(fields: [categoryId], references: [id])
+  donor         User          @relation(fields: [donorId], references: [id])
+  reservations  Reservation[]
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  @@index([categoryId])
+  @@index([status])
+}
+
+model RepairCase {
+  id           Int           @id @default(autoincrement())
+  title        String
+  description  String        @default("")
+  location     String
+  ownerName    String
+  status       CaseStatus    @default(OPEN)
+  volunteerId  Int?
+  volunteer    User?         @relation(fields: [volunteerId], references: [id])
+  reservations Reservation[]
+  createdAt    DateTime      @default(now())
+}
+
+model Reservation {
+  id         Int               @id @default(autoincrement())
+  itemId     Int
+  caseId     Int
+  quantity   Int
+  status     ReservationStatus @default(RESERVED)
+  item       Item              @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  repairCase RepairCase        @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  createdAt  DateTime          @default(now())
+
+  @@unique([itemId, caseId])
+}
+// รูปภาพที่อัปโหลด เก็บไฟล์ไว้ในฐานข้อมูล (Supabase Postgres) เสิร์ฟผ่าน GET /api/uploads/:id
+model Upload {
+  id        Int      @id @default(autoincrement())
+  mimeType  String
+  size      Int
+  data      Bytes
+  createdAt DateTime @default(now())
+}

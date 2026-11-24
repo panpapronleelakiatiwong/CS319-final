@@ -1,0 +1,64 @@
+@import "tailwindcss";
+
+/*
+ * ธีมสี "ครัวเขียวมะกอก + ทองแดง"
+ *   #0c0a08 ดำ (ตัวอักษรหลัก / footer)
+ *   #2a3723 เขียวป่าเข้ม (สีหลัก: ปุ่ม, header)   -> forest-600
+ *   #b9bba8 เขียวเสจ (สีรอง)                      -> sage-300
+ *   #e8e5dd ครีม (พื้นหลัง)                        -> stone-100
+ *   #dcbc98 ทองแดง/แทน (สีเน้น)                    -> sand-300
+ */
+@theme {
+  --font-sans: "Noto Sans Thai", ui-sans-serif, system-ui, sans-serif;
+
+  --color-forest-50: #f1f3ee;
+  --color-forest-100: #e0e5d8;
+  --color-forest-200: #c3ccb6;
+  --color-forest-300: #9eab8c;
+  --color-forest-400: #768765;
+  --color-forest-500: #536446;
+  --color-forest-600: #2a3723;
+  --color-forest-700: #222d1c;
+  --color-forest-800: #1a2316;
+  --color-forest-900: #131a10;
+  --color-forest-950: #0b0f09;
+
+  --color-sage-50: #f6f6f2;
+  --color-sage-100: #ecede5;
+  --color-sage-200: #d9dacb;
+  --color-sage-300: #b9bba8;
+  --color-sage-400: #9a9d86;
+  --color-sage-500: #7e816b;
+  --color-sage-600: #646754;
+  --color-sage-700: #4e5042;
+  --color-sage-800: #3a3c32;
+  --color-sage-900: #282a23;
+
+  --color-sand-50: #fbf6f0;
+  --color-sand-100: #f5eadc;
+  --color-sand-200: #ecd9c1;
+  --color-sand-300: #dcbc98;
+  --color-sand-400: #c99d6f;
+  --color-sand-500: #b5804f;
+  --color-sand-600: #9a6840;
+  --color-sand-700: #7c5235;
+  --color-sand-800: #5f3f2a;
+  --color-sand-900: #463020;
+
+  /* ปรับโทนเทา (stone) ให้อุ่นขึ้นตามพาเลต: ครีม #e8e5dd -> ดำ #0c0a08 */
+  --color-stone-50: #f5f3ee;
+  --color-stone-100: #e8e5dd;
+  --color-stone-200: #d9d5ca;
+  --color-stone-300: #c4bfb2;
+  --color-stone-400: #a29d90;
+  --color-stone-500: #7d786d;
+  --color-stone-600: #5f5a51;
+  --color-stone-700: #45413a;
+  --color-stone-800: #2a2723;
+  --color-stone-900: #1a1815;
+  --color-stone-950: #0c0a08;
+}
+
+body {
+  @apply bg-stone-50 text-stone-950 antialiased;
+}
